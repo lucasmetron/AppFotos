@@ -4,13 +4,17 @@ import { NetworkService } from './NetworkService';
 
 export const PictureService = {
 
-    //se a imagem for da camera o metodo vai no save, se for da internet ele cai no saveRemote
 
-    async save(filepath) { 
-        if (filepath.startsWith('http')) { 
+    async save(filepath) {
+        if (filepath.startsWith('http')) {
             filepath = await PictureService.saveRemote(filepath);
         }
         return filepath
+    },
+
+    async saveToCamera(filepath) {
+        const url = await CameraRoll.saveToCameraRoll(filepath, 'photo');
+        return url
     },
 
     async saveRemote(fromURL) {

@@ -15,7 +15,6 @@ import { StorageService } from './app/services/StorageService';
 
 // import { RNCamera } from 'react-native-camera'
 
-teste
 
 let obj = [
   {
@@ -90,9 +89,6 @@ export default function App() {
 
     setisModalOpen(false);
   }
-
-  let [camera, setCamera] = useState('');
-
 
   return (
     <View style={styles.container}>

@@ -10,11 +10,13 @@ import {
 } from 'react-native';
 import Clipboard from '@react-native-community/clipboard';
 import { PictureService } from "../services/PictureService";
+import { RNCamera } from 'react-native-camera'
 
 export default function CameraDialog(props) {
 
     const [isOpen, setIsOpen] = useState(false)
     const [currentImage, setCurrentImage] = useState('https://naminhapanela.com/wp-content/uploads/2020/07/cheesecake-de-chocolate-2.jpg')
+    const [camera, setCamera] = useState('')
 
     useEffect(() => {
         setIsOpen(props.isOpen)
@@ -38,8 +40,12 @@ export default function CameraDialog(props) {
         props.onClose(result);
     }
 
-    function shot() {
-        console.log('tirando foto')
+    async function shot() {
+        if (camera) {
+            const options = { quality: 0.5, base64: true }
+            const data = await camera.takePictureAsync(options)
+            setCurrentImage(data.uri)
+        }
     }
 
 
@@ -58,7 +64,14 @@ export default function CameraDialog(props) {
                     </TouchableOpacity>
                 </View>
 
-                <View>
+                <View style={styles.cameraContainer}>
+
+                    <RNCamera
+                        ref={ref => setCamera(ref)}
+                        style={styles.camera}
+                        type={RNCamera.Constants.Type.front}
+                        flashMode={RNCamera.Constants.FlashMode.off}
+                    />
 
                 </View>
 
@@ -116,6 +129,19 @@ const styles = StyleSheet.create({
         fontSize: 20,
         color: 'white'
     },
+
+    cameraContainer: {
+        flex: 1,
+        flexDirection: 'column'
+    },
+
+    camera: {
+        flex: 1,
+        height: 250,
+        justifyContent: 'flex-end',
+        alignItems: 'center'
+    },
+
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
